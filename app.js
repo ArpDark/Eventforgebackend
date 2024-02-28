@@ -2,10 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import _ from 'lodash';
+// import _ from 'lodash';
 import session from 'express-session';
-import cookieParser from "cookie-parser";
-import Cookies from "js-cookie";
 import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import cors from 'cors';
@@ -35,17 +33,15 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
-// app.use(express.static("public"));
 
 app.use(session({
-    secret:"abcdefghijklmnop",
+    secret:process.env.PRIVATE_KEY,
     resave:false,
     saveUninitialized:true,
     cookie:{
       maxAge:50000,
     }
 }));
-app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
