@@ -343,3 +343,6 @@ app.post("/login",(req,res)=>{
 app.listen(port, function() {
     console.log("Server started successsfully");
 });
+
+
+module.exports = app;
