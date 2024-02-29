@@ -63,9 +63,9 @@ mongoose.connect("mongodb+srv://"+process.env.DB_UID+":"+process.env.DB_PWD+"@cl
 
 
 const userSchema=new mongoose.Schema({
-    username: String,
-    email:String,
-    password:String,
+    username: {type:String,unique:true},
+    email: {type:String,unique:true},
+    password: String,
 });
 const noteSchema=new mongoose.Schema({
     notename:{type:String,default:" "},
@@ -299,22 +299,25 @@ app.post("/register",(req,res)=>{
         if(err)
         {
           console.log(err);
-          res.send("Registration error");
+          res.send(err);
         }
-        passport.authenticate("local")(req,res,()=>{
-          req.session.user = user.username;
-          req.session.save((err)=>{
-            if(err)
-            {
-                console.log(err);
-                res.send(err);
-            }
-            else
-            {
-                res.send(req.body);
-            }
+        else
+        {
+          passport.authenticate("local")(req,res,()=>{
+            req.session.user = user.username;
+            req.session.save((err)=>{
+              if(err)
+              {
+                  console.log(err);
+                  res.send(err);
+              }
+              else
+              {
+                  res.send(req.body);
+              }
+            });
           });
-        });
+        }
     });
 });
 app.post("/login",(req,res)=>{
